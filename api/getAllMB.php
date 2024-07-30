@@ -11,10 +11,12 @@ if ($_SERVER["REQUEST_METHOD"] === "GET") {
                 $sql = "SELECT * FROM events WHERE CURRENT_DATE BETWEEN DATE(start_date) AND DATE(end_date) ORDER BY start_date ASC;";
                 break;
             case '7day':
-                $sql = "SELECT * FROM events WHERE CURRENT_DATE <= DATE(start_date) AND DATE(start_date) <= CURRENT_DATE + INTERVAL 7 DAY ORDER BY start_date ASC;";
+                $sql = "SELECT * FROM events WHERE DATE(end_date) > CURRENT_DATE AND DATE(start_date) <= CURRENT_DATE + INTERVAL 7 DAY ORDER BY start_date ASC;";
                 break;
             case '1month':
-                $sql = "SELECT * FROM events WHERE CURRENT_DATE <= DATE(start_date) AND DATE(start_date) <= CURRENT_DATE + INTERVAL 30 DAY ORDER BY start_date ASC;";
+                $sql = "SELECT *
+                        FROM events 
+                        WHERE CURRENT_DATE < DATE(start_date) AND DATE(start_date) <= CURRENT_DATE + INTERVAL 30 DAY ORDER BY start_date ASC;";
                 break;
             case 'done':
                 $sql = "SELECT * FROM events WHERE DATE(end_date) < CURRENT_DATE ORDER BY start_date ASC;";

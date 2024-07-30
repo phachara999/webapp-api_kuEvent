@@ -254,15 +254,13 @@
                         name: $("#Loname").val(),
                         latitude: $("#Lolatitude").val(),
                         longitude: $("#Lolongitude").val(),
-                        building_number: $("#editLonum").val(),
+                        building_number: $("#editLonum").val() || "999",
                     };
-
                     $.ajax({
                         url: "./api/editlocation.php",
                         type: "POST",
                         data: updatedData,
                         success: function (response) {
-                            console.log(response)
                             let res = JSON.parse(response);
                             if (res.status === "success") {
                                 Swal.fire({

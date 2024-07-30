@@ -38,7 +38,8 @@ if ($result->num_rows > 0) {
     $data[] = $monthlyData[$key];
   }
 } else {
-  echo "0 results";
+  $labels = [];
+  $data = [];
 }
 
 $sql = "SELECT DISTINCT(YEAR(start_date)) as YEAR FROM events;";
@@ -100,7 +101,9 @@ if ($result->num_rows > 0) {
     $i++;
   }
 } else {
-  echo "0 results";
+  $locations = [];
+  $event_counts = [];
+  $background_colors = [];
 }
 
 
@@ -265,6 +268,7 @@ if (isset($_POST["yearPie"])) {
                             $total = $row["total"];
                             echo "<div class='h5 mb-0 mr-3 font-weight-bold text-gray-800'>" . $total . "</div>";
                           }
+                          $conn->close();
                           ?>
 
                         </div>
@@ -290,13 +294,14 @@ if (isset($_POST["yearPie"])) {
                       </div>
                       <?php
                       require './api/dbconnect.php';
-                      $sql = "SELECT COUNT(*) AS total FROM events WHERE CURRENT_DATE <= DATE(start_date) AND DATE(start_date) <= CURRENT_DATE + INTERVAL 7 DAY";
+                      $sql = "SELECT COUNT(*) as total FROM events WHERE DATE(end_date) > CURRENT_DATE AND DATE(start_date) <= CURRENT_DATE + INTERVAL 7 DAY;";
                       $result = $conn->query($sql);
                       if ($result->num_rows > 0) {
                         $row = $result->fetch_assoc();
                         $total = $row["total"];
                         echo "<div class='h5 mb-0 font-weight-bold text-gray-800'>" . $total . "</div>";
                       }
+                      $conn->close();
                       ?>
                     </div>
                     <div class="col-auto">
@@ -319,15 +324,14 @@ if (isset($_POST["yearPie"])) {
 
                       <?php
                       require './api/dbconnect.php';
-                      $sql = "SELECT count(*) AS total FROM events WHERE CURRENT_DATE <= DATE(start_date) AND DATE(start_date) <= CURRENT_DATE + INTERVAL 30 DAY";
+                      $sql = "SELECT count(*) AS total FROM events WHERE CURRENT_DATE < DATE(start_date) AND DATE(start_date) <= CURRENT_DATE + INTERVAL 30 DAY";
                       $result = $conn->query($sql);
                       if ($result->num_rows > 0) {
                         $row = $result->fetch_assoc();
                         $total = $row["total"];
-                        echo '<div class"h5 mb-0 font-weight-bold text-gray-800">'
-                          . $total .
-                          '</div>';
+                        echo "<div class='h5 mb-0 font-weight-bold text-gray-800'>" . $total . "</div>";
                       }
+                      $conn->close();
 
                       ?>
 
@@ -361,6 +365,7 @@ if (isset($_POST["yearPie"])) {
                         " . $total . "
                       </div>";
                       }
+                      $conn->close();
                       ?>
 
                     </div>
@@ -404,7 +409,9 @@ if (isset($_POST["yearPie"])) {
                         ทั้งหมด " . $total . " กิจกรรม
                       </div>";
                     }
+                    $conn->close();
                     ?>
+
 
                   </div>
 
